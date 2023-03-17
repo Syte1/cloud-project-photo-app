@@ -1,8 +1,8 @@
 const express = require('express')
-const multer = require('multer')
-const upload = multer({ des: "uploads/" })
-
+const cors = require('cors')
 const app = express()
+
+app.use(cors())
 
 app.get('/', (req, res) => {
     console.log("Here")
