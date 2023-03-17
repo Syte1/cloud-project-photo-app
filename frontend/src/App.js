@@ -7,15 +7,16 @@ function App() {
 
     const [images, setImages] = useState([])
 
-    const handleSubmit = (image) => {
-        postImage(image)
+    const handleSubmit = (image1) => {
+        postImage(image1)
+        
     }
-    const postImage = async (image) => {
+    const postImage = async (image2) => {
+        
         const formData = new FormData()
-        formData.append('image', image)
+        formData.append('image', image2)
         const response = await axios.post('http://localhost:3001/images', formData)
-        console.log(response)
-        setImages([...images, response.data])
+        setImages([response.data, ...images])
     }
     return (
         <div>
