@@ -19,3 +19,15 @@ const getUsers = async () => {
 
 getUsers();
 
+const addUsers = async (user) =>{
+  const params={
+    TableName: TABLE_NAME,
+    Item: user
+    }
+  return await dynamoClient.put(params).promise();
+}
+
+const testUser = {"userID": "2", "name": "Chun", "posts": []}
+
+// addUsers(testUser);
+
