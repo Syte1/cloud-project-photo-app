@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 require('dotenv').config();
 
+// AWS setting
 AWS.config.update({region: process.env.AWS_DEFAULT_REGION,
 accessKeyId:process.env.AWS_ACCESS_KEY_ID,
 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
@@ -9,6 +10,25 @@ const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const USER_TABLE= "Users";
 const POST_TABLE= "posts";
 
+/**
+ * post structute:
+ * "postID" : id of the post
+ * "description" : description of the post
+ * "img path": image path / s3 bucket path of the photo
+ * "userID": ID of the user that uploaded the photo
+*/
+
+/**
+ * User structure:
+ * "userID": the primary key of the user, should be a unique string.
+ * "name": account name / nick name of the user
+ * "posts" an array of post item of the user. 
+ */
+
+/**
+ * Get all users from the Users table.
+ * @returns all users in the Users table
+ */
 const getUsers = async () => {
   const params= {
     TableName: USER_TABLE
@@ -20,6 +40,11 @@ const getUsers = async () => {
 
 getUsers();
 
+/**
+ * Create a new user and add it to the users table.
+ * @param {*} user 
+ * @returns 
+ */
 const addUsers = async (user) =>{
   const params={
     TableName: USER_TABLE,
@@ -28,6 +53,11 @@ const addUsers = async (user) =>{
   return await dynamoClient.put(params).promise();
 }
 
+/**
+ * Get a specific user item from the users table by the userID.
+ * @param {*} userID 
+ * @returns 
+ */
 const getUserById = async (userID) => { 
   const params={
     TableName: USER_TABLE,
@@ -38,6 +68,11 @@ const getUserById = async (userID) => {
   return await dynamoClient.get(params).promise();
 }
 
+/**
+ * Delete an user with a specific user id.
+ * @param {*} userID of the user to be deleted
+ * @returns 
+ */
 const deleteUser = async(userID) => {
   const params={
     TableName: USER_TABLE,
@@ -48,6 +83,11 @@ const deleteUser = async(userID) => {
   return await dynamoClient.delete(params).promise();
 }
 
+/**
+ * Add a post to the posts table and users table
+ * @param {*} post to be added to the posts table and users table
+ * @returns 
+ */
 const addPost = async(post)=>{
   const params={
     TableName: POST_TABLE,
@@ -57,6 +97,11 @@ const addPost = async(post)=>{
   return await dynamoClient.put(params).promise();
 }
 
+/**
+ * Get the user id from the post and add the post to the 'posts' attribute of the user
+ * @param {*} post to be appended to the specific user.
+ * @returns 
+ */
 const updateUserPosts = async(post)=>{
   const userItem = await getUserById(post['userID'])
 
@@ -86,23 +131,18 @@ const getUserPost = async(userID) =>{
   return user["posts"]
 }
 
-
-const testPost = {"postID" : "00003", "description": "My second post2", "img_path": "fake_path", "userID": "2"}
-
-const testUser = {"userID": "2", "name": "Chun", "posts": []}
-
-// addUsers(testUser);
-
-// addPost(testPost)
-
-getUserPost("2")
-
-
+//Export all functions to be used in other modules.
 module.exports = {
   dynamoClient,
   getUserById,
   getUsers,
   addUsers,
-  deleteUser
+  deleteUser,
+  addPost,
+  getUserPost
 }
+
+
+
+
 
