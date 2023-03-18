@@ -25,9 +25,11 @@ function App() {
             })
     }
     return (
-        <div>
+        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 h-screen">
             <UploadBar onSubmit={handleSubmit} />
-            <ImageGallery images={images}/>
+            <div className="flex flex-wrap">
+                <ImageGallery images={images}/>
+            </div>
         </div>
     )
 }

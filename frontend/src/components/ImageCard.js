@@ -1,8 +1,8 @@
 function ImageCard({image}) {
     return (
-        <div>
-            <img src={`http://localhost:3001/images/${image}`} alt={image}></img>
-        </div>
+
+            <img className="object-contain h-48 w-96" src={`http://localhost:3001/images/${image}`} alt={image}></img>
+     
     )
 }
 
