@@ -13,7 +13,7 @@ function App() {
         const requestOptions = {
             method: 'GET'
         }
-        fetch('http://54.214.153.1:3001/images/fetch')
+        fetch('http://localhost:3001/images/fetch')
             .then(response => response.json())
             .then(data => {setImages(data.files.slice(1))})
     }, [])
@@ -25,7 +25,7 @@ function App() {
             method: 'POST',
             body: formData
         }
-        fetch('http://54.214.153.1:3001/images', requestOptions)
+        fetch('http://localhost:3001/images', requestOptions)
             .then(response => response.json())
             .then(data=> {
                 console.log(data.filename)
