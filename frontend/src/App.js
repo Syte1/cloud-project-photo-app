@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import UploadBar from './components/UploadBar'
 import ImageGallery from './components/ImageGallery'
+import TestImages from './components/TestImages';
 
 function App() {
     const [images, setImages] = useState([])
@@ -32,11 +33,13 @@ function App() {
                 setImages([...images, data.filename])
             })
     }
+
     return (
         <div className="bg-gradient-to-br from-gray-900 to-indigo-100 h-screen">
             <UploadBar onSubmit={handleSubmit} />
             <div className="flex flex-wrap">
                 <ImageGallery images={images}/>
+                <TestImages />
             </div>
         </div>
     )
