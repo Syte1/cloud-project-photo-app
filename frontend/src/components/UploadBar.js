@@ -4,8 +4,8 @@ const UploadBar = ( {onSubmit} ) => {
         onSubmit(event.target.files[0])
     }
     return (
-    <form class="flex items-center space-x-6">
-        <div class="shrink-0">
+    <form className="flex items-center space-x-6">
+        <div className="shrink-0">
             <img className="h-16 w-16 object-cover rounded-full" src="https://cdn.discordapp.com/avatars/122177431070179329/f87441cd490bc422dca578bfbf69da6f.webp?size=240" alt="Current profile photo" />
         </div>
         <label className="block">
