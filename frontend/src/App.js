@@ -17,7 +17,7 @@ function App() {
             method: 'POST',
             body: formData
         }
-        fetch('http://belalk.xyz/images', requestOptions)
+        fetch('http://54.214.153.1:3001/images', requestOptions)
             .then(response => response.json())
             .then(data=> {
                 console.log(data.filename)
