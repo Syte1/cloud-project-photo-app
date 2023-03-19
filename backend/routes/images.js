@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const multer = require('multer')
 const path = require("path");
+var fs = require('fs');
 
 
 const storage = multer.diskStorage({
@@ -9,7 +10,7 @@ const storage = multer.diskStorage({
     cb(null, 'images')
   },
   filename: function (req, file, cb) {
-    // Generate a unique filename with the original extension
+    // Generate a unique filename with the originawl extension
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     const extension = file.originalname.split('.').pop()
     cb(null, file.fieldname + '-' + uniqueSuffix + '.' + extension)
@@ -20,6 +21,12 @@ const upload = multer({ storage: storage });
 
 router.use(express.static("images"));
 
+
+router.get("/fetch", (req, res) => {
+  var files = fs.readdirSync('images');
+  return res.send({ files })
+})
+
 router.get("/:imageName", (req, res) => {
   const imageName = req.params.imageName;
   const imagePath = path.join(__dirname, "images", imageName);
@@ -29,5 +36,6 @@ router.get("/:imageName", (req, res) => {
 router.post("/", upload.single('image'), (req, res) => {
     return res.send(JSON.stringify(req.file))
 })
+
 
 module.exports = router

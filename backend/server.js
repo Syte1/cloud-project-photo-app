@@ -9,7 +9,6 @@ app.use(cors())
 //     next();
 // });
 
-
 app.get('/', (req, res) => {
     console.log("Here")
     res.send("test")

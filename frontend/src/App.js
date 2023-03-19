@@ -1,15 +1,23 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import UploadBar from './components/UploadBar'
 import ImageGallery from './components/ImageGallery'
 
 function App() {
-
     const [images, setImages] = useState([])
 
     const handleSubmit = async (image1) => {
         postImage(image1)
-        
     }
+
+    useEffect(() => {
+        const requestOptions = {
+            method: 'GET'
+        }
+        fetch('http://54.214.153.1:3001/images/fetch')
+            .then(response => response.json())
+            .then(data => {setImages(data.files.slice(1))})
+    }, [])
+
     const postImage = (image2) => {
         const formData = new FormData()
         formData.append('image', image2)
