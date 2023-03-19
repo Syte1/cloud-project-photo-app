@@ -17,7 +17,7 @@ function App() {
             method: 'POST',
             body: formData
         }
-        fetch('http://localhost:3001/images', requestOptions)
+        fetch('http://belalk.xyz/images', requestOptions)
             .then(response => response.json())
             .then(data=> {
                 console.log(data.filename)
