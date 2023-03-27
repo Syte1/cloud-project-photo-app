@@ -7,84 +7,19 @@ accessKeyId:process.env.AWS_ACCESS_KEY_ID,
 secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
-const USER_TABLE= "Users";
 const POST_TABLE= "posts";
 
 /**
  * post structute:
  * "postID" : id of the post
  * "description" : description of the post
- * "img path": image path / s3 bucket path of the photo
- * "userID": ID of the user that uploaded the photo
+ * "img_path": image path / s3 bucket path of the photo
+ * "password": password to delete the photo
+ * "likecount": number of likes of the photo
 */
 
 /**
- * User structure:
- * "userID": the primary key of the user, should be a unique string.
- * "name": account name / nick name of the user
- * "posts" an array of post item of the user. 
- */
-
-/**
- * Get all users from the Users table.
- * @returns all users in the Users table
- */
-const getUsers = async () => {
-  const params= {
-    TableName: USER_TABLE
-  };
-  const users = await dynamoClient.scan(params).promise();
-  console.log(users)
-  return users;
-}
-
-getUsers();
-
-/**
- * Create a new user and add it to the users table.
- * @param {*} user 
- * @returns 
- */
-const addUsers = async (user) =>{
-  const params={
-    TableName: USER_TABLE,
-    Item: user
-    }
-  return await dynamoClient.put(params).promise();
-}
-
-/**
- * Get a specific user item from the users table by the userID.
- * @param {*} userID 
- * @returns 
- */
-const getUserById = async (userID) => { 
-  const params={
-    TableName: USER_TABLE,
-    Key:{
-      userID,
-    },
-  };
-  return await dynamoClient.get(params).promise();
-}
-
-/**
- * Delete an user with a specific user id.
- * @param {*} userID of the user to be deleted
- * @returns 
- */
-const deleteUser = async(userID) => {
-  const params={
-    TableName: USER_TABLE,
-    Key:{
-      userID,
-    },
-  };
-  return await dynamoClient.delete(params).promise();
-}
-
-/**
- * Add a post to the posts table and users table
+ * Add a post to the posts table.
  * @param {*} post to be added to the posts table and users table
  * @returns 
  */
@@ -93,53 +28,121 @@ const addPost = async(post)=>{
     TableName: POST_TABLE,
     Item: post
   }
-  updateUserPosts(post)
   return await dynamoClient.put(params).promise();
 }
 
 /**
- * Get the user id from the post and add the post to the 'posts' attribute of the user
- * @param {*} post to be appended to the specific user.
+ * Get all posts from the post table. 
  * @returns 
  */
-const updateUserPosts = async(post)=>{
-  const userItem = await getUserById(post['userID'])
-
-  console.log(userItem)
-
-  const user = userItem["Item"]
-  console.log(user)
-
-  const postArr = user['posts']
-  console.log(postArr)
-
-  user['posts'].push(post);
-  console.log("post pushed")
-
+const getAllPost = async() =>{
   const params={
-    TableName: USER_TABLE,
-    Item: user
+    TableName:POST_TABLE,
   }
-  return await dynamoClient.put(params).promise();
-
+  const posts = await dynamoClient.scan(params).promise();
+  console.log(posts)
+  return posts;
 }
 
-const getUserPost = async(userID) =>{
-  const userItem = await getUserById(userID)
-  const user = userItem['Item']
-  console.log(user["posts"])
-  return user["posts"]
+/**
+ * Get a specific post from the posts table.
+ * @param {*} postID 
+ * @returns 
+ */
+const getPostById = async (postID) =>{
+  const params={
+    TableName: POST_TABLE,
+    Key:{
+      postID,
+    },
+  };
+  let post = await dynamoClient.get(params).promise();
+  return post["Item"];
 }
+
+const getImgPath = async (postID) =>{
+  let post = await getPostById(postID)
+  return post["img_path"]
+}
+
+const getPostDescription = async postID =>{
+  let post = await getPostById(postID)
+  return post["description"]
+}
+
+/**
+ * Increment the like count of a post specific post by 1.
+ * @param {*} postID 
+ * @returns 
+ */
+const incrementLikeCount = async (postID) =>{
+  const params ={
+    TableName:POST_TABLE,
+    Key:{"postID":postID},
+    UpdateExpression: "SET like_count = like_count + :incrValue",
+    ExpressionAttributeValues:{":incrValue":1}
+  }
+  return await dynamoClient.update(params).promise()
+}
+
+/**
+ * Given a password to delete a post, delete it from the posts table if its correct.
+ * @param {*} postID 
+ * @param {*} password 
+ */
+const deletePost = async (postID, password) =>{
+  try{
+    post = await getPostById(postID)
+    if (post["password"] === password){
+      const params ={
+        TableName: POST_TABLE,
+        Key:{postID}
+      }
+      return await dynamoClient.delete(params).promise()
+    } else{
+      console.log("Password is incorrect")
+    }
+  } catch (e){
+    console.log("post does not exist, please retry")
+  }
+}
+
+/**
+ * Get the number of like of a post.
+ * @param {*} postID 
+ * @returns 
+ */
+const getPostLikeCount = async (postID) =>{
+  let post = await getPostById(postID)
+  return post["like_count"]
+}
+
+post1 = {postID:"ABCDEF", description: "Hello World", like_count:100, password:"12345"}
+
+const testFunctions = async () =>{
+  await incrementLikeCount("ABCDEF")
+  const lc = await getPostLikeCount("ABCDEF")
+  getAllPost()
+  // getPostLikeCount("ABCDE")
+// incrementLikeCount("ABCDE")
+// deletePost("ABCDaaE", "319139")
+// addPost(post1)
+  console.log(lc)
+}
+
+
 
 //Export all functions to be used in other modules.
 module.exports = {
   dynamoClient,
-  getUserById,
-  getUsers,
-  addUsers,
-  deleteUser,
   addPost,
-  getUserPost
+  getAllPost,
+  getPostById,
+  getImgPath,
+  getPostDescription,
+  getPostLikeCount,
+  incrementLikeCount,
+  deletePost
 }
 
 
