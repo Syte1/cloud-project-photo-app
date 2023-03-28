@@ -120,8 +120,8 @@ const getPostLikeCount = async (postID) =>{
 post1 = {postID:"ABCDEF", description: "Hello World", like_count:100, password:"12345"}
 
 const testFunctions = async () =>{
-  await incrementLikeCount("ABCDEF")
-  const lc = await getPostLikeCount("ABCDEF")
+  await incrementLikeCount("012345")
+  const lc = await getPostLikeCount("012345")
   getAllPost()
   // getPostLikeCount("ABCDE")
 // incrementLikeCount("ABCDE")
@@ -129,7 +129,7 @@ const testFunctions = async () =>{
 // addPost(post1)
   console.log(lc)
 }
-
+// testFunctions()
 
 
 //Export all functions to be used in other modules.

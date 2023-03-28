@@ -3,7 +3,8 @@ const router = express.Router()
 const multer = require('multer')
 const path = require("path");
 var fs = require('fs');
-const { uploadFile, getFileStream } = require('../s3')
+const { uploadFile, getFileStream } = require('../s3');
+const { stdout } = require("process");
 
 
 const storage = multer.diskStorage({
@@ -34,21 +35,12 @@ router.get("/:imageName", (req, res) => {
   res.sendFile(imagePath);
 });
 
-router.get('/images/:key', (req,res) => {
-  console.log("CAlledddd!")
-  const key = req.params.key
-  const readStream = getFileStream(key)
-
-  readStream.pipe(res)
-
-})
-
 router.post("/", upload.single('image'), async(req, res) => {
     const file = req.file
     console.log(file)
     const uploadResult = await uploadFile(file)
     console.log(uploadResult)
-    return res.send({imagePath: `/images/${uploadResult.Key}`})
+    return res.send({imagePath: `/images/${uploadResult.Location}`})
 })
 
 
