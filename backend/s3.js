@@ -16,17 +16,25 @@ const s3 = new S3({
 
 
 //uploads a file to s3
-function uploadFile(file){
+const uploadFile = async (file) => {
+  const { originalname, buffer } = file;
 
-  const fileStream = fs.createReadStream(file.path)
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: originalname, // You can change this to a unique filename like you did before with the `storage` configuration if you'd like
+    Body: buffer,
+    ContentType: file.mimetype,
+  };
 
-  const uploadParams = {
-    Bucket: bucketName,
-    Body: fileStream,
-    Key: file.filename
-  }
-  return s3.upload(uploadParams).promise()
-}
+  return new Promise((resolve, reject) => {
+    s3.upload(params, (error, data) => {
+      if (error) {
+        reject(error);
+      }
+      resolve(data);
+    });
+  });
+};
 exports.uploadFile = uploadFile
 
 function getFileStream(fileKey){

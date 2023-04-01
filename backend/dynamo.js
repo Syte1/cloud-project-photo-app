@@ -90,20 +90,23 @@ const incrementLikeCount = async (postID) =>{
  * @param {*} postID 
  * @param {*} password 
  */
-const deletePost = async (postID, password) =>{
-  try{
-    post = await getPostById(postID)
-    if (post["password"] === password){
-      const params ={
-        TableName: POST_TABLE,
-        Key:{postID}
-      }
-      return await dynamoClient.delete(params).promise()
-    } else{
-      console.log("Password is incorrect")
-    }
-  } catch (e){
-    console.log("post does not exist, please retry")
+const deletePost = async (postID, password) => {
+  const post = await getPostById(postID);
+  if (!post) {
+    return { error: 'Post not found' };
+  }
+  if (post.password !== password) {
+    return { error: 'Incorrect password' };
+  }
+  try {
+    const params = {
+      TableName: POST_TABLE,
+      Key: { postID }
+    };
+    await dynamoClient.delete(params).promise();
+    return { success: 'Post deleted' }; // Add this line to return a success object
+  } catch (e) {
+    console.log("post does not exist, please retry");
   }
 }
 
