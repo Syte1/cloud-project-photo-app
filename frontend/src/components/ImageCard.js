@@ -1,8 +1,14 @@
-function ImageCard({image}) {
-    return (
 
-            <img className="object-contain h-48 w-96" src={`http://localhost:3001/images/${image}`} alt={image}></img>
-     
+function ImageCard({image, description, onDelete, onClick}) {
+    return (
+        <div className="relative">
+            <img
+                className="object-contain h-48 w-96 cursor-pointer"
+                src={image}
+                alt={"pic"}
+                onClick={() => onClick(image, description)}
+            ></img>
+        </div>
     )
 }
 
