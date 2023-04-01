@@ -9,8 +9,8 @@ function App() {
     const [images, setImages] = useState([])
     
     useEffect(() => {
-        console.log(fetch('http://localhost:3001/posts/'))
-        fetch('http://localhost:3001/posts/')
+        console.log(fetch('http://54.214.153.1:3001/posts/'))
+        fetch('http://54.214.153.1:3001/posts/')
         .then(response => response.json())
         .then(data => {
             setImages(data.Items.map(item => item))})
@@ -42,7 +42,7 @@ function App() {
       };
 
     const checkPassword = async (postID, enteredPassword) => {
-        const response = await fetch(`http://localhost:3001/posts/${postID}`);
+        const response = await fetch(`http://54.214.153.1:3001/posts/${postID}`);
         const data = await response.json();
         return data.password === enteredPassword;
     };
@@ -54,7 +54,7 @@ function App() {
             method: 'POST',
             body: formData
         };
-        const response = await fetch('http://localhost:3001/images', requestOptions);
+        const response = await fetch('http://54.214.153.1:3001/images', requestOptions);
         const data = await response.json();
         await postToDB(data.imagePath);
         return data.imagePath;
@@ -82,7 +82,7 @@ function App() {
             },
             body: formParams.toString()
         }
-        await fetch('http://localhost:3001/posts/', requestOptions);
+        await fetch('http://54.214.153.1:3001/posts/', requestOptions);
     };
 
     const deleteFromDB = async (postID, password) => {
@@ -92,7 +92,7 @@ function App() {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           },
         };
-        const response = await fetch(`http://localhost:3001/posts/${postID}?password=${password}`, requestOptions);
+        const response = await fetch(`http://54.214.153.1:3001/posts/${postID}?password=${password}`, requestOptions);
         console.log('Delete response:', response);
       };
 
