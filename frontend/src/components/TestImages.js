@@ -9,7 +9,6 @@ function TestImages() {
       const timestamp = new Date().getTime();
       const response = await fetch(`/images/image-1679262012297-997697120.gif?timestamp=${timestamp}`);
       const blob = await response.blob();
-      console.log(URL.createObjectURL(blob))
       setFileUrl(URL.createObjectURL(blob));
     } catch (err) {
       console.log(err);

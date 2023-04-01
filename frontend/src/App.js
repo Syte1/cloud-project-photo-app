@@ -4,13 +4,14 @@ import ImageGallery from './components/ImageGallery'
 import ImageModal from "./components/ImageModal";
 
 function App() {
+    const IP = "localhost"
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [images, setImages] = useState([])
     
     useEffect(() => {
-        console.log(fetch('http://54.214.153.1:3001/posts/'))
-        fetch('http://54.214.153.1:3001/posts/')
+        // console.log(fetch(`http://${IP}:3001/posts/`))
+        fetch(`http://${IP}:3001/posts/`)
         .then(response => response.json())
         .then(data => {
             setImages(data.Items.map(item => item))})
@@ -42,9 +43,11 @@ function App() {
       };
 
     const checkPassword = async (postID, enteredPassword) => {
-        const response = await fetch(`http://54.214.153.1:3001/posts/${postID}`);
+        const response = await fetch(`http://${IP}:3001/posts/${postID}`);
         const data = await response.json();
-        return data.password === enteredPassword;
+        const verified = await fetch(`http://${IP}:3001/verify/${enteredPassword}`);
+        const result = await verified.json()
+        return (data.password === enteredPassword || result.verified);
     };
 
     const postImage = async (image2) => {
@@ -54,7 +57,7 @@ function App() {
             method: 'POST',
             body: formData
         };
-        const response = await fetch('http://54.214.153.1:3001/images', requestOptions);
+        const response = await fetch(`http://${IP}:3001/images`, requestOptions);
         const data = await response.json();
         await postToDB(data.imagePath);
         return data.imagePath;
@@ -82,7 +85,7 @@ function App() {
             },
             body: formParams.toString()
         }
-        await fetch('http://54.214.153.1:3001/posts/', requestOptions);
+        await fetch(`http://${IP}:3001/posts/`, requestOptions);
     };
 
     const deleteFromDB = async (postID, password) => {
@@ -92,8 +95,8 @@ function App() {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           },
         };
-        const response = await fetch(`http://54.214.153.1:3001/posts/${postID}?password=${password}`, requestOptions);
-        console.log('Delete response:', response);
+        const response = await fetch(`http://${IP}:3001/posts/${postID}?password=${password}`, requestOptions);
+        // console.log('Delete response:', response);
       };
 
     return (

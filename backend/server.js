@@ -20,8 +20,10 @@ app.get('/', (req, res) => {
 
 const imageRouter = require("./routes/images")
 const postRouter = require("./routes/posts")
+const verifyRouter = require("./routes/verify")
 app.use("/images", imageRouter)
 app.use("/posts", postRouter)
+app.use("/verify", verifyRouter)
 
 
 app.listen(3001)
