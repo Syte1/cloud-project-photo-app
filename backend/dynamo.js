@@ -15,7 +15,7 @@ const POST_TABLE= "posts";
  * "description" : description of the post
  * "img_path": image path / s3 bucket path of the photo
  * "password": password to delete the photo
- * "likecount": number of likes of the photo
+ * "like_count": number of likes of the photo
 */
 
 /**
@@ -77,14 +77,15 @@ const getPostDescription = async postID =>{
  */
 const incrementLikeCount = async (postID) =>{
   const params ={
-    TableName:POST_TABLE,
-    Key:{"postID":postID},
+    TableName: POST_TABLE,
+    Key: {"postID":postID},
     UpdateExpression: "SET like_count = like_count + :incrValue",
     ExpressionAttributeValues:{":incrValue":1}
   }
+  console.log("TESTTTTT")
+  console.log(params)
   return await dynamoClient.update(params).promise()
 }
-
 /**
  * Given a password to delete a post, delete it from the posts table if its correct.
  * @param {*} postID 

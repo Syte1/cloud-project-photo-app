@@ -17,6 +17,19 @@ function App() {
             setImages(data.Items.map(item => item))})
     }, [])
 
+    const handleLike = async (postID, increment = false) => {
+        if (increment) {const newPut = {
+            method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+        }}
+        const response = await fetch(`http://${IP}:3001/posts/${postID}/`, newPut)
+        const data = await response.json();
+        console.log("ASDASF")
+        console.log(data)
+        return data.like_count;
+    }};
+
     const handleImageClick = (image, description, password) => {
         setSelectedImage(image);
         setSelectedDescription(description);
@@ -104,12 +117,13 @@ function App() {
             <UploadBar onSubmit={handleSubmit} />
             {selectedImage && (
                 <ImageModal
-                image={selectedImage}
-                description={selectedDescription}
-                checkPassword={checkPassword}
-                onClose={() => setSelectedImage(null)}
-                onDelete={handleDelete}
-              />
+                    image={selectedImage}
+                    description={selectedDescription}
+                    checkPassword={checkPassword}
+                    onClose={() => setSelectedImage(null)}
+                    onDelete={handleDelete}
+                    onLike={handleLike}
+                />
 )}
             <div className="flex flex-wrap">
                 <ImageGallery images={images} onDelete={handleDelete} onClick={handleImageClick} />

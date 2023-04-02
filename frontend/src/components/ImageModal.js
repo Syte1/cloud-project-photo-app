@@ -1,9 +1,30 @@
 import { HiX } from "react-icons/hi";
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-function ImageModal({ image, description, onClose, onDelete, checkPassword }) {
+function ImageModal({ image, description, onClose, onDelete, checkPassword, onLike }) {
     const [enteredPassword, setEnteredPassword] = useState('');
     const [passwordValid, setPasswordValid] = useState(true);
+    const [likes, setLikes] = useState(0);
+
+    useEffect(() => {
+        handleLike()
+    }, [])
+
+    useEffect(() => {
+        const fetchLikes = async () => {
+            const postID = image.split('/').slice(-1)[0];
+            const likeCount = await onLike(postID, false);
+            setLikes(likeCount);
+        };
+        fetchLikes()        
+    }, [image, onLike]);
+
+    const handleLike = async () => {
+        
+        const postID = image.split('/').slice(-1)[0];
+        const newLikeCount = await onLike(postID, true);
+        setLikes(newLikeCount);
+    };
 
     const handleDelete = async (postID, password) => {
         const isValid = await checkPassword(postID, password);
@@ -38,8 +59,14 @@ function ImageModal({ image, description, onClose, onDelete, checkPassword }) {
                 value={enteredPassword}
                 onChange={(e) => setEnteredPassword(e.target.value)}
                 autoComplete="off"
-                
             />
+            <div className="flex justify-between items-center mt-4">
+            <button
+                className="mt-4 px-10 py-2 bg-blue-600 text-white rounded-md"
+                onClick={handleLike}
+            >
+                Like ({likes})
+            </button>
                 <button
                 className={`mt-4 px-4 py-2 bg-red-600 text-white rounded-md ${
                     !passwordValid ? "opacity-50 cursor-not-allowed" : ""
@@ -48,8 +75,11 @@ function ImageModal({ image, description, onClose, onDelete, checkPassword }) {
                 >
                 Delete
                 </button>
+                </div>
+                
                             {!passwordValid && (
                 <p className="text-red-600 mt-2">Incorrect password. Please try again.</p>
+                
             )}
             </div>
         </div>
