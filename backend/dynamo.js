@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
 require('dotenv').config();
 
 // AWS setting
@@ -8,28 +9,24 @@ secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY});
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const POST_TABLE= "posts";
-
-/**
- * post structute:
- * "postID" : id of the post
- * "description" : description of the post
- * "img_path": image path / s3 bucket path of the photo
- * "password": password to delete the photo
- * "like_count": number of likes of the photo
-*/
-
 /**
  * Add a post to the posts table.
  * @param {*} post to be added to the posts table and users table
  * @returns 
  */
-const addPost = async(post)=>{
-  const params={
+const addPost = async (post) => {
+  const newPost = {
+    ...post,
+    postID: uuidv4(),
+  };
+
+  const params = {
     TableName: POST_TABLE,
-    Item: post
-  }
+    Item: newPost,
+  };
+
   return await dynamoClient.put(params).promise();
-}
+};
 
 /**
  * Get all posts from the post table. 
@@ -82,7 +79,6 @@ const incrementLikeCount = async (postID) =>{
     UpdateExpression: "SET like_count = like_count + :incrValue",
     ExpressionAttributeValues:{":incrValue":1}
   }
-  console.log("TESTTTTT")
   console.log(params)
   return await dynamoClient.update(params).promise()
 }

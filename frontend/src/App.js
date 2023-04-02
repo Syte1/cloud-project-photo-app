@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react'
 import UploadBar from './components/UploadBar'
 import ImageGallery from './components/ImageGallery'
 import ImageModal from "./components/ImageModal";
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
     const IP = "localhost"
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
+    const [selectedImgLink, setSelectedImageLink] = useState(null);
     const [images, setImages] = useState([])
     
     useEffect(() => {
@@ -18,42 +20,53 @@ function App() {
     }, [])
 
     const handleLike = async (postID, increment = false) => {
-        if (increment) {const newPut = {
+        let newPut;
+        if (increment) {newPut = {
             method: 'PUT',
             headers: {
-            'Content-Type': 'application/json',
-        }}
+                'Content-Type': 'application/json',
+                }
+            }
+        }
+        else {newPut = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+                }
+            }
+        }
         const response = await fetch(`http://${IP}:3001/posts/${postID}/`, newPut)
         const data = await response.json();
-        console.log("ASDASF")
         console.log(data)
         return data.like_count;
-    }};
+    };
 
-    const handleImageClick = (image, description, password) => {
-        setSelectedImage(image);
+    const handleImageClick = (postID, description, img_path) => {
+        setSelectedImage(postID);
         setSelectedDescription(description);
+        setSelectedImageLink(img_path)
     };
     const handleSubmit = async (image1, description, password) => {
         const imagePath = await postImage(image1);
+        const randomID = uuidv4(); // Generate a random ID
         const newImage = {
-            postID: imagePath.split('/').slice(-1)[0],
+            postID: randomID,
             description: description,
             img_path: imagePath,
             password: password,
             like_count: 0
         };
         setImages([...images, newImage]);
-        await postToDB(imagePath, description, password);
+        await postToDB(randomID, imagePath, description, password);
     };
 
     const handleDelete = async (postID, enteredPassword) => {
         const isValid = await checkPassword(postID, enteredPassword);
         if (isValid) {
-          deleteFromDB(postID, enteredPassword);
-          setImages(images.filter(image => image.img_path.split('/').slice(-1)[0] !== postID));
+            deleteFromDB(postID, enteredPassword);
+            setImages(images.filter(image => image.postID !== postID));
         }
-      };
+    };
 
     const checkPassword = async (postID, enteredPassword) => {
         const response = await fetch(`http://${IP}:3001/posts/${postID}`);
@@ -72,15 +85,13 @@ function App() {
         };
         const response = await fetch(`http://${IP}:3001/images`, requestOptions);
         const data = await response.json();
-        await postToDB(data.imagePath);
+        // await postToDB(data.imagePath);
         return data.imagePath;
     };
     
-    const postToDB = async (imageLink, description, password) => {
-        const splitLink = imageLink.split('/');
-        const id = splitLink[splitLink.length - 1];
+    const postToDB = async (randomID, imageLink, description, password) => {
         const newPost = {
-            postID: id,
+            postID: randomID,
             description: description,
             img_path: imageLink,
             password: password,
@@ -98,7 +109,9 @@ function App() {
             },
             body: formParams.toString()
         }
-        await fetch(`http://${IP}:3001/posts/`, requestOptions);
+        const response = await fetch(`http://${IP}:3001/posts/`, requestOptions);
+        const data = await response.json();
+        return data;
     };
 
     const deleteFromDB = async (postID, password) => {
@@ -117,8 +130,9 @@ function App() {
             <UploadBar onSubmit={handleSubmit} />
             {selectedImage && (
                 <ImageModal
-                    image={selectedImage}
+                    imageID={selectedImage}
                     description={selectedDescription}
+                    img_path={selectedImgLink}
                     checkPassword={checkPassword}
                     onClose={() => setSelectedImage(null)}
                     onDelete={handleDelete}

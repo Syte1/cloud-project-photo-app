@@ -24,7 +24,6 @@ router.post("/", async (req, res) =>{
  * Increment the like count when a put request to a specific post is received.
  */
 router.put("/:postID", async(req, res) =>{
-  console.log(req.params.postID)
   let postID = req.params.postID
   await db.incrementLikeCount(postID)
   let post = await db.getPostById(postID)
@@ -34,7 +33,6 @@ router.put("/:postID", async(req, res) =>{
 
 router.get("/:postID", async (req, res) =>{
   let postID = req.params.postID
-  console.log(postID)
   let post = await db.getPostById(postID)
   res.send(post)
 })
