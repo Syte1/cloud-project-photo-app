@@ -14,7 +14,7 @@ router.post("/", async (req, res) =>{
   let body = req.body
   console.log(body)
   let like_count = parseInt(body.like_count)
-  let new_post = {postID: body.postID, description: body.description, img_path: body.img_path, password: body.password, like_count: body.like_count}
+  let new_post = {postID: body.postID, description: body.description, img_path: body.img_path, password: body.password, like_count: like_count}
   await db.addPost(new_post)
 
   res.status(200).send(new_post)
