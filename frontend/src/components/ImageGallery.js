@@ -3,7 +3,6 @@ import ImageCard from "./ImageCard"
 function ImageGallery({images, onDelete, onClick}) {
     return (
         images.map((item, index) => {
-            console.log(item)
             return (
                 <div className="p-2" key={item.postID}>
                     <ImageCard
