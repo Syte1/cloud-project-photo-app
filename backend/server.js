@@ -2,6 +2,12 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
+var fs = require('fs');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/apache2/ssl/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/apache2/ssl/fullchain.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+var httpsServer = https.createServer(credentials, app);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -25,4 +31,5 @@ app.use("/posts", postRouter)
 app.use("/verify", verifyRouter)
 
 
-app.listen(3001)
+httpsServer.listen(3001);
+

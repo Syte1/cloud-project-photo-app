@@ -13,7 +13,7 @@ function App() {
     
     useEffect(() => {
         // console.log(fetch(`http://${IP}:3001/posts/`))
-        fetch(`http://${IP}:3001/posts/`)
+        fetch(`https://${IP}:3001/posts/`)
         .then(response => response.json())
         .then(data => {
             setImages(data.Items.map(item => item))})
@@ -35,7 +35,7 @@ function App() {
                 }
             }
         }
-        const response = await fetch(`http://${IP}:3001/posts/${postID}/`, newPut)
+        const response = await fetch(`https://${IP}:3001/posts/${postID}/`, newPut)
         const data = await response.json();
         console.log(data)
         return data.like_count;
@@ -69,9 +69,9 @@ function App() {
     };
 
     const checkPassword = async (postID, enteredPassword) => {
-        const response = await fetch(`http://${IP}:3001/posts/${postID}`);
+        const response = await fetch(`https://${IP}:3001/posts/${postID}`);
         const data = await response.json();
-        const verified = await fetch(`http://${IP}:3001/verify/${enteredPassword}`);
+        const verified = await fetch(`https://${IP}:3001/verify/${enteredPassword}`);
         const result = await verified.json()
         return (data.password === enteredPassword || result.verified);
     };
@@ -83,7 +83,7 @@ function App() {
             method: 'POST',
             body: formData
         };
-        const response = await fetch(`http://${IP}:3001/images`, requestOptions);
+        const response = await fetch(`https://${IP}:3001/images`, requestOptions);
         const data = await response.json();
         // await postToDB(data.imagePath);
         return data.imagePath;
@@ -109,7 +109,7 @@ function App() {
             },
             body: formParams.toString()
         }
-        const response = await fetch(`http://${IP}:3001/posts/`, requestOptions);
+        const response = await fetch(`https://${IP}:3001/posts/`, requestOptions);
         const data = await response.json();
         return data;
     };
@@ -121,7 +121,7 @@ function App() {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           },
         };
-        const response = await fetch(`http://${IP}:3001/posts/${postID}?password=${password}`, requestOptions);
+        const response = await fetch(`https://${IP}:3001/posts/${postID}?password=${password}`, requestOptions);
         // console.log('Delete response:', response);
       };
 
