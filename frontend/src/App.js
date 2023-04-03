@@ -37,7 +37,7 @@ function App() {
         }
         const response = await fetch(`https://${IP}:3001/posts/${postID}/`, newPut)
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         return data.like_count;
     };
 
