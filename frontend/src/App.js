@@ -5,7 +5,7 @@ import ImageModal from "./components/ImageModal";
 import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-    const IP = "localhost"
+    const IP = "belalk.xyz"
     const [selectedImage, setSelectedImage] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedImgLink, setSelectedImageLink] = useState(null);
@@ -126,7 +126,7 @@ function App() {
       };
 
     return (
-        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 h-screen">
+        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 min-h-screen">
             <UploadBar onSubmit={handleSubmit} />
             {selectedImage && (
                 <ImageModal

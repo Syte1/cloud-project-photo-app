@@ -45,12 +45,12 @@ function ImageModal({ imageID, description, img_path, onClose, onDelete, checkPa
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50"
         onClick={handleOverlayClick}>
-        <div className="bg-white p-4 rounded-lg shadow-lg max-w-screen-2xl">
+        <div className="bg-white p-4 rounded-lg shadow-lg max-w-screen-xl max-h-screen overflow-y-auto">
                 <button className="absolute top-2 right-2" onClick={onClose}>
                     <HiX className="h-6 w-6 text-gray-700" />
                 </button>
 
-                <img className="w-full h-auto mb-4" src={img_path} alt="Selected" />
+                <img className="w-full h-auto mb-4 max-h-[calc(100vh-20rem)]" src={img_path} alt="Selected" />
                 <p className="text-gray-700 mb-4">{description}</p>
                 <input
                 type=""
