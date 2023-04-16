@@ -2,22 +2,23 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
-var fs = require('fs');
-var https = require('https');
-var privateKey  = fs.readFileSync('/etc/apache2/ssl/privkey.pem', 'utf8');
-var certificate = fs.readFileSync('/etc/apache2/ssl/fullchain.pem', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-var httpsServer = https.createServer(credentials, app);
+const fs = require('fs');
+const https = require('https');
+const crypto = require('crypto');
+const privateKey  = fs.readFileSync('/etc/apache2/ssl/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/apache2/ssl/fullchain.pem', 'utf8');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
+app.use((req, res, next) => {
+    if (req.secure) {
+      next();
+    } else {
+      res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+  });
+  
 app.use(cors())
-// band-aid solution for CORS
-// app.use((req, res, next) => {
-//     res.append('Access-Control-Allow-Origin', ['*']);
-//     next();
-// });
 
 app.get('/', (req, res) => {
     res.send("test")
@@ -30,6 +31,11 @@ app.use("/images", imageRouter)
 app.use("/posts", postRouter)
 app.use("/verify", verifyRouter)
 
+const tlsOptions = {
+  secureProtocol: 'TLSv1_2_method',
+  key: privateKey,
+  cert: certificate,
+};
 
+const httpsServer = https.createServer(tlsOptions, app);
 httpsServer.listen(3001);
-
