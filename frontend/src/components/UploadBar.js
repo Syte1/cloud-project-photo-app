@@ -47,14 +47,14 @@ const UploadBar = ( {onSubmit} ) => {
       </label>
             <input
                 type="text"
-                placeholder="Description"
+                placeholder="Describe your image"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="px-3 py-2 rounded-md bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <input
                 type="password"
-                placeholder="Password"
+                placeholder="Delete password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="px-3 py-2 rounded-md bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -62,11 +62,7 @@ const UploadBar = ( {onSubmit} ) => {
              <button className="ml-2 bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700">
                 Upload
             </button>
-            <div
-        className="absolute top-0 right-0 mt-2 mr-2 bg-white text-xs text-gray-700 px-2 py-1 rounded shadow"
-      >
-        Click images to view
-      </div>
+
     </form>
     )
 }
