@@ -4,7 +4,6 @@ const app = express()
 const bodyParser = require('body-parser')
 const fs = require('fs');
 const https = require('https');
-const crypto = require('crypto');
 const privateKey  = fs.readFileSync('/etc/apache2/ssl/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/apache2/ssl/fullchain.pem', 'utf8');
 
@@ -35,6 +34,30 @@ const tlsOptions = {
   secureProtocol: 'TLSv1_2_method',
   key: privateKey,
   cert: certificate,
+  ciphers: [
+    'ECDHE-RSA-AES128-GCM-SHA256',
+    'ECDHE-ECDSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES256-GCM-SHA384',
+    'ECDHE-ECDSA-AES256-GCM-SHA384',
+    'DHE-RSA-AES128-GCM-SHA256',
+    'ECDHE-RSA-AES128-SHA256',
+    'DHE-RSA-AES128-SHA256',
+    'ECDHE-RSA-AES256-SHA384',
+    'DHE-RSA-AES256-SHA384',
+    'ECDHE-RSA-AES256-SHA256',
+    'DHE-RSA-AES256-SHA256',
+    'HIGH',
+    '!aNULL',
+    '!eNULL',
+    '!EXPORT',
+    '!DES',
+    '!RC4',
+    '!MD5',
+    '!PSK',
+    '!SRP',
+    '!CAMELLIA'
+  ].join(':'),
+  honorCipherOrder: true
 };
 
 const httpsServer = https.createServer(tlsOptions, app);
