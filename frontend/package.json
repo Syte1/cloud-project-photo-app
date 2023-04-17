@@ -19,7 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve-build": "serve -l 443 -s build --ssl-cert '/etc/apache2/ssl/fullchain.pem' --ssl-key '/etc/apache2/ssl/privkey.pem'"
+    "serve-build": "node https-server.js"
   },
   "eslintConfig": {
     "extends": [
