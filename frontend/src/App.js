@@ -142,7 +142,7 @@ function App() {
       };
 
       return (
-        <div className="bg-gradient-to-br from-gray-900 to-indigo-100  pt-0.5 gallery-background">
+        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 pt-0.5 gallery-background min-h-screen">
             <p className="text-center text-white m-3">
                 Click on an image below or upload your own!
             </p>
