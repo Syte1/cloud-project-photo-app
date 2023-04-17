@@ -2,10 +2,11 @@ import ImageCard from "./ImageCard"
 
 function ImageGallery({ images, onDelete, onClick }) {
     return (
+     
       <div className="flex flex-wrap justify-center">
         {images.map((item, index) => {
           return (
-            <div className="m-2" key={item.postID}>
+            <div className="m-1" key={item.postID}>
               <ImageCard
                 key={item.postID}
                 postID={item.postID}

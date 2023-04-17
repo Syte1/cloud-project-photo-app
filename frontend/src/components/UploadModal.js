@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { HiX } from "react-icons/hi";
-import "./UploadModal.css";
+import "../css/UploadModal.css";
 
 function UploadModal({ onClose, onSubmit }) {
   const [selectedFile, setSelectedFile] = useState();
@@ -22,7 +22,7 @@ function UploadModal({ onClose, onSubmit }) {
 
   const isDisabled = !selectedFile || !description || !password;
   const submitClass = isDisabled ? "bg-slate-400" : "bg-blue-600";
-  const errorClass = "border-red-500";
+  const errorClass = "border-x-8 border-red-500";
 
   return (
     <div
@@ -33,6 +33,11 @@ function UploadModal({ onClose, onSubmit }) {
         }
       }}
     >
+    <div
+      className="fixed inset-0 bg-black opacity-50"
+      onClick={onClose}>
+
+    </div>
       <div className="upload-modal">
         <button className="absolute top-2 right-2" onClick={onClose}>
           <HiX className="h-6 w-6 text-gray-700" />

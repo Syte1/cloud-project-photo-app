@@ -4,6 +4,7 @@ import ImageGallery from './components/ImageGallery'
 import ImageModal from "./components/ImageModal";
 import { v4 as uuidv4 } from 'uuid';
 import UploadModal from './components/UploadModal';
+import "./css/App.css"
 
 function App() {
     const IP = "belalk.xyz"
@@ -141,9 +142,12 @@ function App() {
       };
 
       return (
-        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 min-h-screen pt-0.5">
+        <div className="bg-gradient-to-br from-gray-900 to-indigo-100  pt-0.5 gallery-background">
+            <p className="text-center text-white m-3">
+                Click on an image below or upload your own!
+            </p>
             <button
-              className="px-4 py-2 bg-green-600 text-white rounded-md mt-4 mx-auto block"
+              className="px-4 py-2 bg-green-600 text-white rounded-md mt-4 mb-4 mx-auto block"
               onClick={() => setShowUploadModal(true)}
             >
               Upload an Image!
