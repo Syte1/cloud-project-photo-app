@@ -5,7 +5,7 @@ function ImageModal({ imageID, description, img_path, onClose, onDelete, checkPa
     const [enteredPassword, setEnteredPassword] = useState('');
     const [passwordValid, setPasswordValid] = useState(true);
     const [likes, setLikes] = useState(0);
-
+    const [showPasswordField, setShowPasswordField] = useState(false);
     // useEffect(() => {
     //     handleLike()
     // }, [])
@@ -66,32 +66,36 @@ function ImageModal({ imageID, description, img_path, onClose, onDelete, checkPa
                 </p>
                 </div>
                 <p className="text-gray-700 mb-4">{description}</p>
-            <div className="flex justify-between items-center mt-4">
-                    <button
-                        className="mt-4 px-10 py-2 bg-blue-600 text-white rounded-md"
-                        onClick={handleLike}
-                    >
-                        Like ({likes})
-                    </button>
-                    <div className="flex items-center">
-                        <input
-                            type=""
-                            placeholder="Enter password"
-                            className="w-full px-3 py-2 mt-4 border border-gray-300 rounded-md"
-                            value={enteredPassword}
-                            onChange={(e) => setEnteredPassword(e.target.value)}
-                            autoComplete="new-password"
-                        />
+                <div className="flex justify-between items-center mt-4">
+                <button className="mt-4 ml-4 px-10 py-2 bg-blue-600 text-white rounded-md" onClick={handleLike}> Like ({likes}) </button>
+                    {showPasswordField ? (
+                        <div className="flex items-center">
+                            <input
+                                type="password"
+                                placeholder="Enter password"
+                                className="w-full px-3 py-2 mt-4 border border-gray-300 rounded-md"
+                                value={enteredPassword}
+                                onChange={(e) => setEnteredPassword(e.target.value)}
+                                autoComplete="new-password"
+                            />
+                            <button
+                                className={`ml-4 mt-4 px-4 py-2 bg-red-600 text-white rounded-md ${
+                                    !passwordValid ? "opacity-50 cursor-not-allowed" : ""
+                                }`}
+                                onClick={() => handleDelete(imageID, enteredPassword)}>
+                                Delete
+                            </button>
+                        </div>
+                    ) : (
                         <button
-                            className={`ml-4 mt-4 px-4 py-2 bg-red-600 text-white rounded-md ${
-                                !passwordValid ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
-                            onClick={() => handleDelete(imageID, enteredPassword)}
+                            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md"
+                            onClick={() => setShowPasswordField(true)}
                         >
                             Delete
                         </button>
-                    </div>
-                </div>
+                    )}
+
+            </div>
                             {!passwordValid && (
                 <p className="text-red-600 mt-2">Incorrect password. Please try again.</p>
                 

@@ -3,6 +3,7 @@ import UploadBar from './components/UploadBar'
 import ImageGallery from './components/ImageGallery'
 import ImageModal from "./components/ImageModal";
 import { v4 as uuidv4 } from 'uuid';
+import UploadModal from './components/UploadModal';
 
 function App() {
     const IP = "belalk.xyz"
@@ -10,6 +11,7 @@ function App() {
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedImgLink, setSelectedImageLink] = useState(null);
     const [images, setImages] = useState([])
+    const [showUploadModal, setShowUploadModal] = useState(false);
     
     useEffect(() => {
         // console.log(fetch(`http://${IP}:3001/posts/`))
@@ -47,6 +49,19 @@ function App() {
         setSelectedImageLink(img_path)
     };
     const handleSubmit = async (image1, description, password) => {
+        const imagePath = await postImage(image1);
+        const randomID = uuidv4(); // Generate a random ID
+        const newImage = {
+            postID: randomID,
+            description: description,
+            img_path: imagePath,
+            password: password,
+            like_count: 0
+        };
+        setImages([...images, newImage]);
+        await postToDB(randomID, imagePath, description, password);
+    };
+    const handleUpload = async (image1, description, password) => {
         const imagePath = await postImage(image1);
         const randomID = uuidv4(); // Generate a random ID
         const newImage = {
@@ -125,9 +140,20 @@ function App() {
         // console.log('Delete response:', response);
       };
 
-    return (
-        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 min-h-screen">
-            <UploadBar onSubmit={handleSubmit} />
+      return (
+        <div className="bg-gradient-to-br from-gray-900 to-indigo-100 min-h-screen pt-0.5">
+            <button
+              className="px-4 py-2 bg-green-600 text-white rounded-md mt-4 mx-auto block"
+              onClick={() => setShowUploadModal(true)}
+            >
+              Upload an Image!
+            </button>
+            {showUploadModal && (
+              <UploadModal
+                onClose={() => setShowUploadModal(false)}
+                onSubmit={handleUpload}
+              />
+            )}
             {selectedImage && (
                 <ImageModal
                     imageID={selectedImage}
