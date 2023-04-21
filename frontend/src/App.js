@@ -63,11 +63,10 @@ function App() {
         await postToDB(randomID, imagePath, description, password);
     };
     const handleUpload = async (image1, description, password) => {
-        const randomID = uuidv4(); // Generate a random ID
-        let imagePath = await postImage(image1);
-        imagePath = `${randomID}.${imagePath.split('.').pop()}`;
+        const imagePath = await postImage(image1);
+        const postid = imagePath.split(".").slice(0, -1).join(".")
         const newImage = {
-            postID: randomID,
+            postID: postid,
             description: description,
             img_path: imagePath,
             password: password,
@@ -75,7 +74,7 @@ function App() {
         };
         console.log(newImage.img_path)
         setImages([...images, newImage]);
-        await postToDB(randomID, imagePath, description, password);
+        await postToDB(postid, imagePath, description, password);
     };
 
     const handleDelete = async (postID, enteredPassword) => {

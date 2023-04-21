@@ -5,6 +5,7 @@ const path = require("path");
 var fs = require('fs');
 const { uploadFile } = require('../s3');
 const { stdout } = require("process");
+const { v4: uuidv4 } = require('uuid');
 
 const storage = multer.memoryStorage();
 
@@ -21,7 +22,8 @@ router.get("/fetch", (req, res) => {
 router.post("/", upload.single('image'), async (req, res) => {
   const file = req.file;
   const uploadResult = await uploadFile(file);
-  return res.send({ imagePath: `${uploadResult.Location}` });
+  const randomID = uuidv4()
+  return res.send({ imagePath: `${randomID}.${uploadResult.Location.split('.').pop()}` });
 });
 
 
