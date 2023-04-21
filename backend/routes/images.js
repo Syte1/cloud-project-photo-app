@@ -21,9 +21,9 @@ router.get("/fetch", (req, res) => {
 
 router.post("/", upload.single('image'), async (req, res) => {
   const file = req.file;
-  const uploadResult = await uploadFile(file);
   const randomID = uuidv4()
-  return res.send({ imagePath: `${randomID}.${uploadResult.Location.split('.').pop()}` });
+  const uploadResult = await uploadFile(file, randomID);
+  return res.send({ imagePath: uploadResult.Location });
 });
 
 
