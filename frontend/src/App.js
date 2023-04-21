@@ -63,15 +63,17 @@ function App() {
         await postToDB(randomID, imagePath, description, password);
     };
     const handleUpload = async (image1, description, password) => {
-        const imagePath = await postImage(image1);
         const randomID = uuidv4(); // Generate a random ID
+        let imagePath = await postImage(image1);
+        imagePath = `${randomID}.${imagePath.split('.').pop()}`;
         const newImage = {
             postID: randomID,
             description: description,
-            img_path: randomID.concat(imagePath.split('.').pop()),
+            img_path: imagePath,
             password: password,
             like_count: 0
         };
+        console.log(newImage.img_path)
         setImages([...images, newImage]);
         await postToDB(randomID, imagePath, description, password);
     };
