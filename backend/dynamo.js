@@ -17,7 +17,6 @@ const POST_TABLE= "posts";
 const addPost = async (post) => {
   const newPost = {
     ...post,
-    postID: uuidv4(),
   };
 
   const params = {

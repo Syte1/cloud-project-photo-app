@@ -68,7 +68,7 @@ function App() {
         const newImage = {
             postID: randomID,
             description: description,
-            img_path: imagePath,
+            img_path: randomID.concat(imagePath.split('.').pop()),
             password: password,
             like_count: 0
         };
