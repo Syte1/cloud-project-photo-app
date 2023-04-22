@@ -64,9 +64,9 @@ function App() {
     };
     const handleUpload = async (image1, description, password) => {
         const imagePath = await postImage(image1);
-        const postid = imagePath.split(".").slice(0, -1).join(".")
+        const postID = imagePath.split('/').pop().split('.')[0];
         const newImage = {
-            postID: postid,
+            postID: postID,
             description: description,
             img_path: imagePath,
             password: password,
@@ -74,7 +74,7 @@ function App() {
         };
         console.log(newImage.img_path)
         setImages([...images, newImage]);
-        await postToDB(postid, imagePath, description, password);
+        await postToDB(postID, imagePath, description, password);
     };
 
     const handleDelete = async (postID, enteredPassword) => {
