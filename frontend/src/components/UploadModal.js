@@ -7,6 +7,7 @@ function UploadModal({ onClose, onSubmit }) {
   const [description, setDescription] = useState("");
   const [password, setPassword] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [invalidFormat, setInvalidFormat] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -54,8 +55,21 @@ function UploadModal({ onClose, onSubmit }) {
             type="file"
             accept="image/*"
             className="hidden"
-            onChange={(e) => setSelectedFile(e.target.files[0])}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              const validFormats = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+              if (file && validFormats.includes(file.type)) {
+                setSelectedFile(file);
+                setInvalidFormat(false);
+              } else {
+                setSelectedFile(null);
+                setInvalidFormat(true);
+              }
+            }}
           />
+          {invalidFormat && (
+            <p className="text-red-600 mt-2">Invalid image format. Please select a JPEG, PNG, GIF, or WEBP file.</p>
+          )}
           {selectedFile && (
             <div>
               <img
