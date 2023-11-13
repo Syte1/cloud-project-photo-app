@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/cloud-project-photo-app
+    destination: /home/ubuntu/cloud-project-photo-app
 hooks:
   ApplicationStart:
     - location: scripts/restart_server.sh
