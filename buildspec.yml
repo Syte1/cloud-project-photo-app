@@ -11,8 +11,6 @@ phases:
     commands:
     - echo "Showing current directory"
     - ls -la
-    - echo "Navigating to the frontend directory"
-    - cd frontend  # This is from the root of your repo
     - echo "Building the frontend"
     - npm run build
 
