@@ -1,0 +1,35 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Install dependencies here (e.g., npm)
+      - echo Installing source NPM dependencies...
+      - npm install
+
+  pre_build:
+    commands:
+      # Any pre-build steps like tests or linting can go here
+      - echo Running pre-build commands...
+
+  build:
+    commands:
+      # Your build commands
+      - echo Build started on `date`
+      - npm run build
+
+  post_build:
+    commands:
+      # Post-build steps (e.g., notifications, cleanup)
+      - echo Build completed on `date`
+      # Add commands to copy build artifacts to a specific location if needed
+
+# If you need to output artifacts (e.g., for deployment), specify them here
+artifacts:
+  files:
+    - location_of_build_artifacts # Update with the actual location of your build artifacts
+
+# You can specify environment variables here if needed
+# environment_variables:
+#   plaintext:
+#     VARIABLE_NAME: "value"
