@@ -173,7 +173,7 @@ function App() {
 
 				{/* Position the "View Resume" button to the rightish side */}
 				<button
-					className="px-4 py-2 bg-blue-600 text-white rounded-md mt-4 mb-4"
+					className="px-4 py-2 bg-purple-600 text-white rounded-md mt-4 mb-4"
 					style={{ position: "absolute", right: "20%" }} // Adjust as needed
 					onClick={() => setShowResumeModal(true)}
 				>
