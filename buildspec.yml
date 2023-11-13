@@ -21,9 +21,11 @@ phases:
 
 artifacts:
   files:
-    - '**/*'
-  base-directory: 'frontend/build' # replace with the directory where your build outputs its files
-
+    - frontend/build/**/*
+    - appspec.yml
+    - scripts/**/*
+  discard-paths: no
+  
 cache:
   paths:
     - 'frontend/node_modules/**/*'
