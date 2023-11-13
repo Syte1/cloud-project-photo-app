@@ -3,9 +3,8 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "Install node.js dependencies"
+      - echo "Navigate to frontend directory"
       - cd frontend
-      - npm install
 
   build:
     commands:
