@@ -66,12 +66,6 @@ const UploadBar = ({ onSubmit }) => {
 			<button className="ml-2 bg-violet-600 text-white px-4 py-2 rounded-md hover:bg-violet-700">
 				Upload
 			</button>
-			<button
-				className="ml-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-				onClick={props.onShowResume} // Add this prop to trigger showing the resume
-			>
-				View Resume
-			</button>
 		</form>
 	);
 };
