@@ -16,7 +16,9 @@ phases:
     commands:
       # Your build commands
       - echo Build started on `date`
+      - cd frontend
       - npm run build
+      - echo Build completed on `date`
 
   post_build:
     commands:
